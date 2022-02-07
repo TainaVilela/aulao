@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <script type="text/javascript">
+
+        /*
+            |===> Em javascript a função é declarada com a seguinte estrutura:
+            function <nomedafuncao> (<parametros-de-entrara-pode-ser-vazio>) {
+                <ação>
+            }
+        */
+
+        var nomeLocalStorage = 'aula02-acesso';
+
+        function loadPage(){
+            //alert('OK');
+            //console.log('OK');
+            document.title = 'Aula #02';
+
+            document.getElementById('txt-usuario').value = '';
+            document.getElementById('pwd-senha').value = '';
+
+            verificaLocago();
+        }
+
+        /*
+        usuario: element
+        senha: element
+        */
+
+
+        function jaExiste(usuario, senha){
+            //localStorage.getItem('aula02-acesso') = 'usuario|senha'
+            var registro = localStorage.getItem(nomeLocalStorage);
+
+            if(registro == null || registro == undefined){
+                return false;
+            }
+
+            if(registro == usuario.value + '|' + senha.value){
+                return true;
+            }
+
+            return false;
+        }
+
+        function verificaLocago() {
+            var usuario = document.getElementById('txt-usuario');
+            var senha = document.getElementById('pwd-senha');
+            if(jaExiste(usuario, senha)){
+                document.getElementById('btn-cadastrar').style.display = 'none';
+                document.getElementById('btn-entrar').style.display = 'none';
+                document.getElementById('btn-sair').style.display = 'block';
+
+                var registro = localStorage.getItem(nomeLocalStorage);
+                var lista = registro.split('|');
+                document.getElementById('lbl-nome').innerHTML = lista[0];
+            }else{
+                document.getElementById('btn-cadastrar').style.display = 'block';
+                document.getElementById('btn-entrar').style.display = 'block';
+                document.getElementById('btn-sair').style.display = 'none';
+                document.getElementById('lbl-nome').value = '';
+            }
+        }
+
+        function btnEntrar() {
+
+            var usuario = document.getElementById('txt-usuario');
+            var senha = document.getElementById('pwd-senha');
+
+            if (usuario.value == '') {
+                alert('Digite um usuário');
+                return false;
+            }
+
+            if(senha.value == ''){
+                alert('Degite uma senha');
+                return false;
+            }
+
+            if(jaExiste(usuario, senha) == true){
+                alert('Entra no sistema');
+                verificaLocago();
+                return true;
+            }else{
+                alert('Usuario senha incorretos ou inexistentes');
+                return false;
+            }
+
+        }
+
+        function btnCadastrar(){
+            var usuario = document.getElementById('txt-usuario');
+            var senha = document.getElementById('pwd-senha');
+
+            if (usuario.value == '') {
+                alert('Digite um usuário');
+                return false;
+            }
+
+            if(senha.value == ''){
+                alert('Degite uma senha');
+                return false;
+            }
+
+            if(jaExiste(usuario, senha) == true){
+                alert('Usuário já cadastrado');
+                return false;
+            }
+
+            localStorage.setItem(nomeLocalStorage, usuario.value + '|' + senha.value);
+            alert('Cadastrado com sucesso');
+
+            verificaLocago();
+        }
+
+        function btnSair(){
+            localStorage.removeItem(nomeLocalStorage);
+            location.reload();
+        }
+    </script>
+
+</head>
+
+<body onload="loadPage();" style="margin:0;padding:0;background:silver;font-family: Verdana, Geneva, Tahoma, sans-serif;">
+
+<div style="width:100%;height:auto;">
+
+    <h2 style="text-align: center;">Aula #02</h2>
+
+    <!-- selecione o elemento que quer comentar e CTRL+K+C  <p></p>  selecione a região comentada e CTRL+K+U -->
+
+    <div style="width:370px;height:auto;border-radius:15px;margin:50px auto;background:white;padding:30px;">
+
+        <p id="lbl-nome"></p>
+
+        <input id="txt-usuario" type="text" value="" placeholder="Usuario" />
+
+        <input id="pwd-senha" type="password" value="" placeholder="Senha" />
+
+        <input id="btn-entrar" type="button" value="Entrar" onclick="btnEntrar();" />
+        <input id="btn-cadastrar" type="button" value="Cadastrar Usuário" onclick="btnCadastrar();" style="margin: 5px 0;" />
+        <input id="btn-sair" type="button" value="Sair" onclick="btnSair();" style="margin: 5px 0;" />
+
+    </div>
+
+</div>
+
+</body>
+</html>
